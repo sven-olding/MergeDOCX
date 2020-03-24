@@ -31,39 +31,20 @@ import org.w3c.dom.Node;
 
 public class App {
   public static void main(final String[] args) {
-    InputStream inputStreamMainFile = null;
-    InputStream inputStreamSubFile = null;
-    FileOutputStream fileOutputStream = null;
+    File mainFile = new File("./docx/Main.docx");
+    File subFile = new File("./docx/Sub.docx");
 
-    try {
-      File mainFile = new File("./docx/Main.docx");
-      inputStreamMainFile = new FileInputStream(mainFile);
-      File subFile = new File("./docx/Sub.docx");
-      inputStreamSubFile = new FileInputStream(subFile);
-
+    try (InputStream inputStreamMainFile = new FileInputStream(mainFile);
+        InputStream inputStreamSubFile = new FileInputStream(subFile);
+        FileOutputStream fileOutputStream = new FileOutputStream(new File("./docx/Result.docx"));) {
       XWPFDocument wordDocMain = new XWPFDocument(inputStreamMainFile);
       XWPFDocument wordDocSub = new XWPFDocument(inputStreamSubFile);
 
       XWPFDocument wordDocResult = mergeDocuments(wordDocMain, wordDocSub);
 
-      fileOutputStream = new FileOutputStream(new File("./docx/Result.docx"));
-      wordDocResult.write(fileOutputStream);      
+      wordDocResult.write(fileOutputStream);
     } catch (Exception e) {
       e.printStackTrace();
-    } finally {
-      try {
-        if(inputStreamMainFile!=null) {
-          inputStreamMainFile.close();
-        }
-        if(inputStreamSubFile!=null) {
-          inputStreamSubFile.close();
-        }
-        if(fileOutputStream!=null) {
-          fileOutputStream.close();
-        }
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
     }
   }
 
