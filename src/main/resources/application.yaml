@@ -1,0 +1,45 @@
+server.port: 8080
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+  application:
+    name: docx-concat
+  flyway:
+    baselineOnMigrate: true
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+  main:
+    allow-circular-references: true
+
+logging:
+  level:
+    #    root: DEBUG
+    com:
+      example:
+        docxconcat:
+          web:
+            controller:
+              DocController: DEBUG
+    org:
+      springframework:
+        web:
+          client:
+            RestTemplate: DEBUG
+          security: trace
+  file:
+    name: logs/${POD_NAME:docx-concat}.log
+  pattern:
+    dateformat: dd-MM-yyyy HH:mm:ss
+  logback:
+    rollingpolicy:
+      max-file-size: 50MB
+      max-history: 183
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
